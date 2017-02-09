@@ -1,7 +1,7 @@
 package app.service.impl;
 
 import app.entity.FilesEntity;
-import app.exceptions.InvalidFormatFileException;
+import app.exceptions.FileNotSavedException;
 import app.model.FileTypes;
 import app.repository.storage.FilesEntityRepository;
 import app.service.SaveService;
@@ -43,9 +43,8 @@ public class SaveServiceImpl implements SaveService {
                 return filesEntityRepository.save(filesEntity);
             }
         else {
-                logger.error("Error! File format \"" + type + "\" not supported." +
-                        " Upload canceled.");
-                throw new InvalidFormatFileException("Invalid file format.");
+                logger.error("Error! File format \"" + type + "\" not supported. Upload canceled.");
+                throw new FileNotSavedException("Invalid file format.");
             }
     }
 

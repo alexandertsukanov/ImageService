@@ -2,7 +2,8 @@ package app.model;
 
 public enum FileTypes {
 
-    text("text/plain");
+    text("text/plain"),
+    img("image/jpeg");
 
     String name;
 

@@ -15,7 +15,7 @@ public class FileController {
     SaveService saveService;
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public FilesEntity saveFile(@RequestBody MultipartFile file) throws Exception {
+    public FilesEntity saveFileAndEntity(@RequestBody MultipartFile file) throws Exception {
         return saveService.saveFile(file);
     }
 

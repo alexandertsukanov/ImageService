@@ -1,7 +1,7 @@
 package app;
 
 import app.entity.FilesEntity;
-import app.exceptions.InvalidFormatFileException;
+import app.exceptions.FileNotSavedException;
 import app.repository.storage.FilesEntityRepository;
 import app.service.SaveService;
 import org.junit.Assert;
@@ -26,23 +26,26 @@ public class RestUploaderTest {
     @Autowired
     FilesEntityRepository filesEntityRepository;
 
+    final static String PATH = "/anypath/";
+
     @Test
     public void entityTest(){
         FilesEntity filesEntity = new FilesEntity();
-        filesEntity.setPath("/user");
+        filesEntity.setPath(PATH);
         Timestamp time = filesEntity.setTime(new Timestamp(System.currentTimeMillis()));
         filesEntity.setType("text");
         filesEntityRepository.save(filesEntity);
 
         FilesEntity fromDataBaseFileEntity = filesEntityRepository.findByTime(time);
         Assert.assertEquals(filesEntity, fromDataBaseFileEntity);
-        Assert.assertEquals(fromDataBaseFileEntity.getPath(), "/user");
+        Assert.assertEquals(fromDataBaseFileEntity.getPath(), PATH);
         Assert.assertEquals(fromDataBaseFileEntity.getType(), "text");
         Assert.assertEquals(fromDataBaseFileEntity.getTime(), time);
+        filesEntityRepository.delete(fromDataBaseFileEntity.getId());
     }
 
-    @Test(expected = InvalidFormatFileException.class)
-    public void invalidFileFormatExceptionTest() throws Exception {
+    @Test(expected = FileNotSavedException.class)
+    public void FileNotSavedExceptionTest() throws Exception {
         MockMultipartFile file = new MockMultipartFile("file", "hello.img", "text/plain", "".getBytes());
         saveService.saveFile(file);
     }

@@ -32,8 +32,9 @@ public class FilesEntity implements Serializable {
         return time;
     }
 
-    public void setTime(Timestamp time) {
+    public Timestamp setTime(Timestamp time) {
         this.time = time;
+        return time;
     }
 
     @Basic

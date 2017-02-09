@@ -2,7 +2,15 @@ package app.model;
 
 public enum FileTypes {
 
-    txt,
-    img
+    text("text/plain");
 
+    String name;
+
+    FileTypes(String name){
+        this.name = name;
+    }
+
+    public String getType(){
+        return name;
+    }
 }

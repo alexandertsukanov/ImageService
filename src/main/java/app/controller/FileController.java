@@ -4,6 +4,7 @@ import app.entity.FilesEntity;
 import app.exceptions.FileNotSavedException;
 import app.model.FileTypes;
 import app.service.SaveService;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,17 +31,25 @@ public class FileController {
             }
             else{
                 LOGGER.error("Error! File format \"" + type + "\" not supported. Upload canceled.");
-                throw new FileNotSavedException();
+                throw new FileNotSavedException("Invalid file format.");
             }
     }
 
     @ExceptionHandler(FileNotSavedException.class)
-    private ResponseEntity<?> InvalidFormatExceptionHandler() {
+    private ResponseEntity<?> InvalidFormatExceptionHandler(HttpServletRequest req, Exception ex) {
+        LOGGER.error("Request can't be completed properly. " +
+                "\nMethod: " + req.getMethod() + "" +
+                "\nURL: " + req.getRequestURI() + "" +
+                "\nException Message: " + ex.getMessage());
         return new ResponseEntity<>("Invalid file format.", HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(Exception.class)
-    private ResponseEntity<?> exceptionHandler() {
+    private ResponseEntity<?> exceptionHandler(HttpServletRequest req, Exception ex) {
+        LOGGER.error("Request can't be completed properly. " +
+                "\nMethod: " + req.getMethod() + "" +
+                "\nURL: " + req.getRequestURI() + "" +
+                "\nException Message: " + ex.getMessage());
         return new ResponseEntity<>("Ooops! Something goes wrong =)", HttpStatus.FORBIDDEN);
     }
 

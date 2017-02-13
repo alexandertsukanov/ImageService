@@ -16,7 +16,7 @@ import java.sql.Timestamp;
 @Service
 public class SaveServiceImpl implements SaveService {
 
-    private static final Logger logger = Logger.getLogger(SaveServiceImpl.class);
+    private static final Logger LOGGER = Logger.getLogger(SaveServiceImpl.class);
 
     @Autowired
     private FilesEntityRepository filesEntityRepository;
@@ -26,14 +26,14 @@ public class SaveServiceImpl implements SaveService {
 
     @Override
     public FilesEntity saveFile(MultipartFile file, String type) throws Exception {
-        logger.info("Save Service Entering parameters: " + file.getName() + " " + type);
-        logger.info("Saving file to " + path);
+        LOGGER.info("Save Service Entering parameters: " + file.getName() + " " + type);
+        LOGGER.info("Saving file to " + path);
         file.transferTo(new File(path + file.getOriginalFilename()));
         FilesEntity filesEntity = new FilesEntity();
         filesEntity.setPath(path + file.getOriginalFilename());
         filesEntity.setTime(new Timestamp(System.currentTimeMillis()));
         filesEntity.setType(type);
-        logger.debug("The file was saved to " + path);
+        LOGGER.debug("The file was saved to " + path);
         return filesEntityRepository.save(filesEntity);
     }
 }

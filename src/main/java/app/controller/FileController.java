@@ -15,21 +15,21 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 public class FileController {
 
-    private static final Logger logger = Logger.getLogger(FileController.class);
+    private static final Logger LOGGER = Logger.getLogger(FileController.class);
 
     @Autowired
     private SaveService saveService;
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     private FilesEntity saveFileAndEntity(@RequestBody MultipartFile file) throws Exception {
-        logger.info("Entering controller...");
+        LOGGER.info("Entering controller...");
         Tika tika = new Tika();
         String type = tika.detect(file.getBytes());
             if (fileFormatCheck(type)) {
                 return saveService.saveFile(file, type);
             }
             else{
-                logger.error("Error! File format \"" + type + "\" not supported. Upload canceled.");
+                LOGGER.error("Error! File format \"" + type + "\" not supported. Upload canceled.");
                 throw new FileNotSavedException();
             }
     }

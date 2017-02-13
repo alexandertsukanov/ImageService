@@ -29,8 +29,8 @@ public class FileServiceImpl implements FileService {
     public FilesEntity saveFile(MultipartFile file) throws Exception {
         LOGGER.info("File Service parameters:" +
                 "\nName: " + file.getName() +
-                "\nFile Type: " + file.getContentType());
-        LOGGER.info("Saving file to " + savePath);
+                "\nFile Type: " + file.getContentType() +
+                "\nSaving file to " + savePath);
         file.transferTo(new File(savePath + file.getOriginalFilename()));
         FilesEntity filesEntity = new FilesEntity();
         filesEntity.setPath(savePath + file.getOriginalFilename());
@@ -43,6 +43,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public boolean fileFormatCheck(MultipartFile file) throws IOException {
         String type = file.getContentType();
+        LOGGER.info("Checking " + type + " format...");
         for (FileTypes f : FileTypes.values()) {
             if (type.equals(f.getType())) {
                 return true;

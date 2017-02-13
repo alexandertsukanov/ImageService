@@ -22,21 +22,21 @@ public class FileServiceImpl implements FileService {
     @Autowired
     private FilesEntityRepository filesEntityRepository;
 
-    @Value("${filepath}")
-    private String path;
+    @Value("${savePath}")
+    private String savePath;
 
     @Override
     public FilesEntity saveFile(MultipartFile file) throws Exception {
         LOGGER.info("File Service parameters:" +
                 "\nName: " + file.getName() +
                 "\nFile Type: " + file.getContentType());
-        LOGGER.info("Saving file to " + path);
-        file.transferTo(new File(path + file.getOriginalFilename()));
+        LOGGER.info("Saving file to " + savePath);
+        file.transferTo(new File(savePath + file.getOriginalFilename()));
         FilesEntity filesEntity = new FilesEntity();
-        filesEntity.setPath(path + file.getOriginalFilename());
+        filesEntity.setPath(savePath + file.getOriginalFilename());
         filesEntity.setTime(new Timestamp(System.currentTimeMillis()));
         filesEntity.setType(file.getContentType());
-        LOGGER.debug("The file was saved to " + path);
+        LOGGER.debug("The file was saved to " + savePath);
         return filesEntityRepository.save(filesEntity);
     }
 

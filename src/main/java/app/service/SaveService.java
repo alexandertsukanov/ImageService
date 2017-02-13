@@ -6,6 +6,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface SaveService {
 
-        FilesEntity saveFile(MultipartFile file) throws Exception;
+    FilesEntity saveFile(MultipartFile file, String type) throws Exception;
 
 }

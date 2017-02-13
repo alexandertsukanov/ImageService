@@ -3,7 +3,7 @@ package app;
 import app.entity.FilesEntity;
 import app.exceptions.FileNotSavedException;
 import app.repository.storage.FilesEntityRepository;
-import app.service.SaveService;
+import app.service.FileService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,7 +21,7 @@ import java.sql.Timestamp;
 public class RestUploaderTest {
 
     @Autowired
-    SaveService saveService;
+    FileService fileService;
 
     @Autowired
     FilesEntityRepository filesEntityRepository;
@@ -47,6 +47,6 @@ public class RestUploaderTest {
     @Test(expected = FileNotSavedException.class)
     public void FileNotSavedExceptionTest() throws Exception {
         MockMultipartFile file = new MockMultipartFile("file", "hello.img", "text/plain", "".getBytes());
-        saveService.saveFile(file, "filetype");
+        fileService.saveFile(file);
     }
 }

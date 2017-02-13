@@ -3,7 +3,7 @@ package app.controller;
 import app.entity.FilesEntity;
 import app.exceptions.FileNotSavedException;
 import app.model.FileTypes;
-import app.service.SaveService;
+import app.service.FileService;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.apache.tika.Tika;
@@ -19,18 +19,16 @@ public class FileController {
     private static final Logger LOGGER = Logger.getLogger(FileController.class);
 
     @Autowired
-    private SaveService saveService;
+    private FileService fileService;
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     private FilesEntity saveFileAndEntity(@RequestBody MultipartFile file) throws Exception {
         LOGGER.info("Entering controller...");
-        Tika tika = new Tika();
-        String type = tika.detect(file.getBytes());
-            if (fileFormatCheck(type)) {
-                return saveService.saveFile(file, type);
+            if (fileService.fileFormatCheck(file)) {
+                return fileService.saveFile(file);
             }
             else{
-                LOGGER.error("Error! File format \"" + type + "\" not supported. Upload canceled.");
+                LOGGER.error("Error! File format "+ file.getContentType()  + " not supported. Upload canceled.");
                 throw new FileNotSavedException("Invalid file format.");
             }
     }
@@ -51,14 +49,5 @@ public class FileController {
                 "\nURL: " + req.getRequestURI() + "" +
                 "\nException Message: " + ex.getMessage());
         return new ResponseEntity<>("Ooops! Something goes wrong =)", HttpStatus.FORBIDDEN);
-    }
-
-    private boolean fileFormatCheck(String s) {
-        for (FileTypes f : FileTypes.values()) {
-            if (s.equals(f.getType())) {
-                return true;
-            }
-        }
-        return false;
     }
 }

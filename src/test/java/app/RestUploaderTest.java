@@ -33,20 +33,20 @@ public class RestUploaderTest {
         FilesEntity filesEntity = new FilesEntity();
         filesEntity.setPath(PATH);
         Timestamp time = filesEntity.setTime(new Timestamp(System.currentTimeMillis()));
-        filesEntity.setType("TEXT");
+        filesEntity.setType("text/plain");
         filesEntityRepository.save(filesEntity);
 
         FilesEntity fromDataBaseFileEntity = filesEntityRepository.findByTime(time);
         Assert.assertEquals(filesEntity, fromDataBaseFileEntity);
         Assert.assertEquals(fromDataBaseFileEntity.getPath(), PATH);
-        Assert.assertEquals(fromDataBaseFileEntity.getType(), "TEXT");
+        Assert.assertEquals(fromDataBaseFileEntity.getType(), "text/plain");
         Assert.assertEquals(fromDataBaseFileEntity.getTime(), time);
         filesEntityRepository.delete(fromDataBaseFileEntity.getId());
     }
 
     @Test(expected = FileNotSavedException.class)
     public void FileNotSavedExceptionTest() throws Exception {
-        MockMultipartFile file = new MockMultipartFile("file", "hello.img", "TEXT/plain", "".getBytes());
+        MockMultipartFile file = new MockMultipartFile("file", "hello.img", "text/plain", "".getBytes());
         saveService.saveFile(file, "filetype");
     }
 }

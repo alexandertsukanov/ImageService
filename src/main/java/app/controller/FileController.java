@@ -2,11 +2,9 @@ package app.controller;
 
 import app.entity.FilesEntity;
 import app.exceptions.FileNotSavedException;
-import app.model.FileTypes;
 import app.service.FileService;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.apache.log4j.Logger;
-import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

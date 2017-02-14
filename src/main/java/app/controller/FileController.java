@@ -15,26 +15,26 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 public class FileController {
 
-    private static final Logger LOGGER = Logger.getLogger(FileController.class);
+    private static final Logger logger = Logger.getLogger(FileController.class);
 
     @Autowired
     private FileService fileService;
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     private FilesEntity saveFileAndEntity(@RequestBody MultipartFile file) throws Exception {
-        LOGGER.info("Entering controller...");
+        logger.info("Entering controller...");
         if (FileTypeValidator.fileFormatCheck(file)) {
                 return fileService.saveFile(file);
             }
             else{
-                LOGGER.error("Error! File format "+ file.getContentType()  + " not supported. Upload canceled.");
+            logger.error("Error! File format " + file.getContentType() + " not supported. Upload canceled.");
                 throw new FileNotSavedException("Invalid file format.");
             }
     }
 
     @ExceptionHandler(FileNotSavedException.class)
     private ResponseEntity<?> InvalidFormatExceptionHandler(HttpServletRequest req, Exception ex) {
-        LOGGER.error("Request can't be completed properly. " +
+        logger.error("Request can't be completed properly. " +
                 "\nMethod: " + req.getMethod() + "" +
                 "\nURL: " + req.getRequestURI() + "" +
                 "\nException Message: " + ex.getMessage());
@@ -43,7 +43,7 @@ public class FileController {
 
     @ExceptionHandler(Exception.class)
     private ResponseEntity<?> exceptionHandler(HttpServletRequest req, Exception ex) {
-        LOGGER.error("Request can't be completed properly. " +
+        logger.error("Request can't be completed properly. " +
                 "\nMethod: " + req.getMethod() + "" +
                 "\nURL: " + req.getRequestURI() + "" +
                 "\nException Message: " + ex.getMessage());

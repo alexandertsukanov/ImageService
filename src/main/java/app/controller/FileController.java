@@ -3,6 +3,7 @@ package app.controller;
 import app.entity.FilesEntity;
 import app.exceptions.FileNotSavedException;
 import app.service.FileService;
+import app.validator.FileTypeValidator;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class FileController {
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     private FilesEntity saveFileAndEntity(@RequestBody MultipartFile file) throws Exception {
         LOGGER.info("Entering controller...");
-            if (fileService.fileFormatCheck(file)) {
+        if (FileTypeValidator.fileFormatCheck(file)) {
                 return fileService.saveFile(file);
             }
             else{

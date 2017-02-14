@@ -1,7 +1,6 @@
 package app.service.impl;
 
 import app.entity.FilesEntity;
-import app.model.FileTypes;
 import app.repository.storage.FilesEntityRepository;
 import app.service.FileService;
 import org.apache.log4j.Logger;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
 import java.sql.Timestamp;
 
 @Service
@@ -32,23 +30,13 @@ public class FileServiceImpl implements FileService {
                 "\nFile Type: " + file.getContentType() +
                 "\nSaving file to " + savePath);
         file.transferTo(new File(savePath + file.getOriginalFilename()));
+        LOGGER.info("Saving file to database...");
         FilesEntity filesEntity = new FilesEntity();
         filesEntity.setPath(savePath + file.getOriginalFilename());
         filesEntity.setTime(new Timestamp(System.currentTimeMillis()));
         filesEntity.setType(file.getContentType());
-        LOGGER.debug("The file was saved to " + savePath);
+        LOGGER.info("The file was saved to database.");
+        LOGGER.info("The file was saved to upload storage at path:" + savePath);
         return filesEntityRepository.save(filesEntity);
-    }
-
-    @Override
-    public boolean fileFormatCheck(MultipartFile file) throws IOException {
-        String type = file.getContentType();
-        LOGGER.info("Checking " + type + " format...");
-        for (FileTypes f : FileTypes.values()) {
-            if (type.equals(f.getType())) {
-                return true;
-            }
-        }
-        return false;
     }
 }
